@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Modernization Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="brand">
+            <div class="brand-icon">STRATEGIC</div>
+            <div class="brand-text">
+                <h1>Dashboard Modernisasi Strategis Penanganan NRW</h1>
+                <p>Sistem Terpadu Penurunan Kehilangan Air & Modernisasi Infrastruktur Jaringan</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-content">
+        <section class="card">
+            <h2>Analisa Masalah & Infrastruktur Kritis</h2>
+            <p>Content for Analisa Masalah will go here.</p>
+        </section>
+        <section class="card full-width">
+            <h2>Data Infrastruktur Kritis (Pipa Tua & Tanpa Tahun Pasang)</h2>
+            <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 15px;">
+              Sesuai Laporan Strategi Modernisasi, pipa yang <strong>tidak memiliki tahun pasang</strong> dan pipa <strong>terpasang ≤ tahun 2001 (usia > 25 tahun)</strong> dikategorikan sebagai <strong>Pipa Tua</strong>. Infrastruktur ini menjadi prioritas utama penggantian karena akumulasi korosi, penyempitan diameter efektif, dan tingginya risiko kebocoran laten.
+            </p>
+            <div class="table-responsive">
+                <table id="critical-infrastructure-table">
+                    <thead>
+                        <tr>
+                            <th>Wilayah</th>
+                            <th style="text-align: center;">Total Jaringan (m³)</th>
+                            <th style="text-align: center;">Pipa Tua (m³)</th>
+                            <th style="text-align: center;">Tahun Pasang Nihil (m³)</th>
+                            <th style="text-align: center;">Total Kritis (m³)</th>
+                            <th style="text-align: center;">Rasio Kritis (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card full-width">
+            <h2>Rincian Diameter Pipa Tua & Tanpa Tahun Pasang Per Wilayah</h2>
+            <div class="table-responsive">
+                <table id="detail-kritis-table">
+                    <thead>
+                        <tr>
+                            <th>Wilayah</th>
+                            <th>Diameter (mm)</th>
+                            <th style="text-align: center;">Pipa Tua (m³)</th>
+                            <th style="text-align: center;">Tahun Nihil (m³)</th>
+                            <th>Status Kerentanan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card full-width">
+            <div class="card-header">
+                <div class="masalah-header-left">
+                    <h2>Identifikasi Kehilangan Air (NRW) Per DMA</h2>
+                    <p style="font-size: 0.75rem; color: #ef4444; font-weight: 600; margin-top: 4px;">⚠️ Tekanan Rata-rata Input DMA: &lt; 1.0 Bar (Anomali Suplai)</p>
+                </div>
+                <div class="view-toggle">
+                    <button class="btn-secondary active" id="heatmap-global-btn">Heatmap Global</button>
+                    <button class="btn-secondary" id="analisa-deep-dive-btn">Analisa Deep-Dive</button>
+                </div>
+            </div>
+
+            <div class="impact-stats" style="margin-bottom: 24px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+                <div class="stat-item">
+                    <span class="stat-label">Total Produksi (5 IPA)</span>
+                    <span class="stat-val" style="color: #fff;" id="total-produksi-dma"></span>
+                    <span class="stat-label">Per Bulan</span>
+                </div>
+                <div class="stat-item" style="border-left: 1px solid #333; padding-left: 20px;">
+                    <span class="stat-label">Volume Air Terbayar</span>
+                    <span class="stat-val" style="color: #10b981;" id="volume-air-terbayar-dma"></span>
+                    <span class="stat-label">Tercatat Per Bulan</span>
+                </div>
+                <div class="stat-item" style="border-left: 1px solid #333; padding-left: 20px;">
+                    <span class="stat-label">Tingkat Kehilangan (NRW)</span>
+                    <span class="stat-val" style="color: #ef4444;" id="tingkat-kehilangan-nrw-dma"></span>
+                    <span class="stat-label">Rata-rata Kota</span>
+                </div>
+            </div>
+
+            <div id="dma-view-content">
+                <!-- DMA content will be loaded here by JavaScript -->
+            </div>
+
+            <div id="analisa-deep-dive-template" style="display: none;">
+                <div class="dma-selector" style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 20px;">
+                    <!-- DMA buttons will be inserted here by JavaScript -->
+                </div>
+                <div class="detail-dual-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="detail-chart-box">
+                        <h4>Volume Meter Induk (m³)</h4>
+                        <div id="meter-induk-chart"></div>
+                    </div>
+                    <div class="detail-chart-box">
+                        <h4>Trend Kehilangan NRW (%)</h4>
+                        <div id="nrw-trend-chart"></div>
+                    </div>
+                </div>
+                <div class="impact-stats" style="margin-top: 20px; padding: 15px;">
+                    <div class="stat-item">
+                        <span class="stat-label">Tekanan Input Rata-rata</span>
+                        <span class="stat-val" style="color: #ef4444;" id="avg-pressure">0.65 Bar</span>
+                    </div>
+                    <div class="stat-item" style="border-left: 1px solid #333; padding-left: 20px;">
+                        <span class="stat-label">Kondisi Suplai</span>
+                        <span class="stat-val" style="color: #ef4444; font-size: 1rem;" id="supply-condition">KRITIS (Under 1 Bar)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card full-width">
+            <h2>Strategi & Estimasi Investasi (CAPEX)</h2>
+            <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 15px;">
+                Estimasi anggaran investasi untuk modernisasi infrastruktur jaringan dan penurunan NRW. Angka ini mencakup biaya penggantian pipa tua, instalasi smart meter, dan optimalisasi sistem. 
+                Fokus pada efisiensi biaya dan dampak jangka panjang terhadap layanan air.
+            </p>
+            <div class="detail-dual-grid" style="margin-bottom: 20px;">
+                <div class="detail-chart-box">
+                    <h4>Alokasi Anggaran (per Wilayah)</h4>
+                    <div id="capex-allocation-chart"></div>
+                </div>
+                <div class="detail-chart-box">
+                    <h4>Komponen Biaya Utama</h4>
+                    <div id="capex-components-chart"></div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="capex-summary-table">
+                    <thead>
+                        <tr>
+                            <th>Wilayah</th>
+                            <th style="text-align: right;">Anggaran Pipa (Rp)</th>
+                            <th style="text-align: right;">Anggaran Smart Meter (Rp)</th>
+                            <th style="text-align: right;">Anggaran Digital (Rp)</th>
+                            <th style="text-align: right;">Total Anggaran (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- CAPEX summary rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card full-width">
+            <h2>Sasaran Strategis & Dampak Layanan</h2>
+            <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 15px;">
+                Visualisasi dampak dari program modernisasi terhadap layanan air dan pencapaian sasaran strategis perusahaan.
+                Meliputi peningkatan cakupan layanan, penurunan keluhan pelanggan, dan peningkatan kualitas air.
+            </p>
+            <div class="detail-dual-grid" style="margin-bottom: 20px;">
+                <div class="detail-chart-box">
+                    <h4>Cakupan Layanan (%)</h4>
+                    <div id="service-coverage-chart"></div>
+                </div>
+                <div class="detail-chart-box">
+                    <h4>Tingkat Kepuasan Pelanggan (%)</h4>
+                    <div id="customer-satisfaction-chart"></div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="service-impact-table">
+                    <thead>
+                        <tr>
+                            <th>Indikator</th>
+                            <th style="text-align: center;">Baseline (2023)</th>
+                            <th style="text-align: center;">Target (2025)</th>
+                            <th style="text-align: center;">Pencapaian (%)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Service impact rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card full-width">
+            <h2>Roadmap Penurunan NRW 10 Tahun</h2>
+            <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 15px;">
+                Rencana strategis 10 tahun untuk penurunan tingkat kehilangan air (NRW) secara bertahap.
+                Mencakup target NRW, volume air terselamatkan, dan milestone implementasi teknologi.
+            </p>
+            <div class="detail-chart-box" style="margin-bottom: 20px;">
+                <h4>Target NRW & Volume Air Terselamatkan</h4>
+                <div id="roadmap-chart"></div>
+            </div>
+
+            <div class="roadmap-timeline">
+                <!-- Timeline items will be inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <section class="card full-width">
+            <h2>Pusat Data & Laporan Terintegrasi</h2>
+            <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 15px;">
+                Akses terintegrasi ke berbagai data operasional, laporan kinerja, dan dokumentasi teknis.
+                Memudahkan monitoring, evaluasi, dan pengambilan keputusan berbasis data.
+            </p>
+            <div class="detail-dual-grid" style="margin-bottom: 20px;">
+                <div class="detail-chart-box">
+                    <h4>Data Produksi Air (m³/bulan)</h4>
+                    <div class="table-responsive" style="max-height: 250px;">
+                        <table id="production-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Bulan</th>
+                                    <th style="text-align: right;">Ratulangi</th>
+                                    <th style="text-align: right;">Panaikang</th>
+                                    <th style="text-align: right;">Antang</th>
+                                    <th style="text-align: right;">Sombala</th>
+                                    <th style="text-align: right;">Sombaopu</th>
+                                    <th style="text-align: right;">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Production data will be inserted here by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="detail-chart-box">
+                    <h4>Data Neraca Air (m³/bulan)</h4>
+                    <div class="table-responsive" style="max-height: 250px;">
+                        <table id="neraca-air-table">
+                            <thead>
+                                <tr>
+                                    <th>Bulan</th>
+                                    <th style="text-align: right;">Produksi</th>
+                                    <th style="text-align: right;">Terbayar</th>
+                                    <th style="text-align: right;">NRW (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Neraca air data will be inserted here by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-list">
+                <h4>Daftar Laporan Penting</h4>
+                <ul>
+                    <li><a href="#" class="text-blue-400 hover:underline">Laporan Kinerja Tahunan 2023</a></li>
+                    <li><a href="#" class="text-blue-400 hover:underline">Analisa Kualitas Air Triwulan I 2024</a></li>
+                    <li><a href="#" class="text-blue-400 hover:underline">Studi Kelayakan Modernisasi Jaringan Pipa</a></li>
+                    <li><a href="#" class="text-blue-400 hover:underline">Dokumentasi Teknis Sistem SCADA</a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="dashboard-footer">
+        <p>Strategic Modernization Dashboard</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
